@@ -1,5 +1,15 @@
 package com.github.dreamroute.fast.starter;
 
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
+
 import static com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect;
 import static com.alibaba.fastjson.serializer.SerializerFeature.WriteNullBooleanAsFalse;
 import static com.alibaba.fastjson.serializer.SerializerFeature.WriteNullListAsEmpty;
@@ -22,17 +32,6 @@ import static org.springframework.http.MediaType.TEXT_HTML;
 import static org.springframework.http.MediaType.TEXT_MARKDOWN;
 import static org.springframework.http.MediaType.TEXT_PLAIN;
 import static org.springframework.http.MediaType.TEXT_XML;
-
-import java.awt.PageAttributes.MediaType;
-import java.util.List;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import com.alibaba.fastjson.support.config.FastJsonConfig;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
 /**
  * JSON转换
