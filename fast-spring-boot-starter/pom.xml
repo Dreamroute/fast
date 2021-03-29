@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.dreamroute</groupId>
         <artifactId>fast</artifactId>
-        <version>1.0-RELEASE</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>fast-spring-boot-starter</artifactId>

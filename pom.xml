@@ -10,10 +10,14 @@
 
     <groupId>com.github.dreamroute</groupId>
     <artifactId>fast</artifactId>
-    <version>1.1-RELEASE</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <properties>
+
+        <!-- 版本信息 -->
+        <revision>1.1-RELEASE</revision>
+
         <java.version>1.8</java.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>

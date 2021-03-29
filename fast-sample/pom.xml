@@ -4,9 +4,17 @@
     <parent>
         <groupId>com.github.dreamroute</groupId>
         <artifactId>fast</artifactId>
-        <version>1.0-RELEASE</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>fast-sample</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.dreamroute</groupId>
+            <artifactId>fast-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

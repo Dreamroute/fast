@@ -32,3 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 /.flattened-pom.xml
+/fast-spring-boot-starter/.flattened-pom.xml
+/fast-sample/.flattened-pom.xml
