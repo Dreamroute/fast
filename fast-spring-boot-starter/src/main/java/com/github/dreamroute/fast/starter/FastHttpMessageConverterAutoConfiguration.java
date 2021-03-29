@@ -3,7 +3,6 @@ package com.github.dreamroute.fast.starter;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -40,7 +39,6 @@ import static org.springframework.http.MediaType.TEXT_XML;
  *
  * @author w.dehai
  */
-@Configuration
 @ConditionalOnClass(ConfigurableWebApplicationContext.class)
 public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigurer {
     @Override

@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.dreamroute.fast.starter.FastHttpMessageConverterAutoConfiguration
+  com.github.dreamroute.fast.starter.FastHttpMessageConverterAutoConfiguration, \
+  com.github.dreamroute.fast.api.ResponseAdvice

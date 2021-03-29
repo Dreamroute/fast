@@ -21,7 +21,8 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @RestControllerAdvice
-class ResponseAdvice implements ResponseBodyAdvice<Object> {
+@SuppressWarnings("ALL")
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     /**
      * 被@NonConvert注解的方法不进行包装，直接返回结果
