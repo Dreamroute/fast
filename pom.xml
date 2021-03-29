@@ -9,7 +9,7 @@
 
 	<groupId>com.github.dreamroute</groupId>
 	<artifactId>fast</artifactId>
-	<version>1.0-RELEASE</version>
+	<version>1.1-RELEASE</version>
 	<packaging>pom</packaging>
 
 	<name>fast</name>
