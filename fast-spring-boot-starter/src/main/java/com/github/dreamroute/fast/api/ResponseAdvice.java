@@ -1,6 +1,6 @@
 package com.github.dreamroute.fast.api;
 
-import com.github.dreamroute.fast.exception.BizException;
+import javax.biz.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 
 /**
  * 1、处理返回值；
- * 2、处理异常；
+ * 2、处理异常，对于bizException是我们定义的异常，需要展示给前端用户，而对于其他异常，均是系统异常，需要告警处理
  *
  * @author w.dehai
  */
@@ -38,10 +38,31 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         return body instanceof RespEnumMarker ? RespUtil.exception((RespEnumMarker) body) : RespUtil.success(body);
     }
 
+    /**
+     * 业务异常，一般不需要特殊处理，其他异常均需要告警处理
+     */
     @ExceptionHandler(BizException.class)
     public RespEnumMarker bizException(BizException e) {
-        log.error("业务异常，错误码: {}, 错误信息: {}", e.getRespEnum().getCode(), e.getRespEnum().getDesc());
+        log.error("[业务异常], " + e.toString(), e);
         return e.getRespEnum();
+    }
+
+    /**
+     * 未知异常，需要告警处理
+     */
+    @ExceptionHandler(Exception.class)
+    public RespEnumMarker exception(Exception e) {
+        log.error("[未知异常]: ", e);
+        return new RespEnumMarker() {
+            @Override
+            public Integer getCode() {
+                return 699;
+            }
+            @Override
+            public String getDesc() {
+                return "o(╥﹏╥)o~~系统出异常啦!,请联系管理员!";
+            }
+        };
     }
 
 }
