@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
  * @author w.dehai
  */
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice("cn.yzw.jc")
 @SuppressWarnings("ALL")
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
