@@ -1,6 +1,8 @@
 package com.github.dreamroute.fast.api;
 
-import javax.biz.exception.BizException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.ValueFilter;
+import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -11,7 +13,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.biz.exception.BizException;
 import java.lang.reflect.Method;
+
+import static com.alibaba.fastjson.JSON.toJSONString;
 
 /**
  * 1、处理返回值；
@@ -35,7 +40,15 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(@Nullable Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        return body instanceof RespEnumMarker ? RespUtil.exception((RespEnumMarker) body) : RespUtil.success(body);
+        RespUtil ru = body instanceof RespEnumMarker ? RespUtil.exception((RespEnumMarker) body) : RespUtil.success(body);
+        ValueFilter vf = (object, name, value) -> {
+            if (value instanceof EnumMarker) {
+                return ((EnumMarker) value).getDesc();
+            }
+            return value;
+        };
+
+        return JSON.parse(toJSONString(ru, vf));
     }
 
     /**

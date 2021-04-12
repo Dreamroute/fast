@@ -56,6 +56,12 @@
             <version>3.0.0</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.github.dreamroute</groupId>
+            <artifactId>mybatis-pro-core</artifactId>
+            <version>1.3.5</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
