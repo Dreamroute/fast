@@ -1,8 +1,5 @@
 package com.github.dreamroute.fast.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.ValueFilter;
-import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -15,8 +12,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.biz.exception.BizException;
 import java.lang.reflect.Method;
-
-import static com.alibaba.fastjson.JSON.toJSONString;
 
 /**
  * 1、处理返回值；
@@ -40,42 +35,40 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(@Nullable Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        RespUtil ru = body instanceof RespEnumMarker ? RespUtil.exception((RespEnumMarker) body) : RespUtil.success(body);
-        ValueFilter vf = (object, name, value) -> {
-            if (value instanceof EnumMarker) {
-                return ((EnumMarker) value).getDesc();
-            }
-            return value;
-        };
-
-        return JSON.parse(toJSONString(ru, vf));
+        return body instanceof RespEnumMarker ? RespUtil.exception((RespEnumMarker) body) : RespUtil.success(body);
     }
 
     /**
-     * 业务异常，一般不需要特殊处理，其他异常均需要告警处理
+     * 业务异常，其他异常均需要告警处理
      */
     @ExceptionHandler(BizException.class)
-    public RespEnumMarker bizException(BizException e) {
+    public Object bizException(BizException e) {
         log.error("[业务异常], " + e.toString(), e);
-        return e.getRespEnum();
+        return exception(e.getRespEnum());
     }
 
     /**
      * 未知异常，需要告警处理
      */
     @ExceptionHandler(Exception.class)
-    public RespEnumMarker exception(Exception e) {
+    public Object exception(Exception e) {
         log.error("[未知异常]: ", e);
-        return new RespEnumMarker() {
+        RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
                 return 699;
             }
+
             @Override
             public String getDesc() {
                 return "o(╥﹏╥)o~~系统出异常啦!,请联系管理员!";
             }
         };
+        return exception(respEnumMarker);
+    }
+
+    private Object exception(RespEnumMarker rem) {
+        return RespUtil.exception(rem);
     }
 
 }

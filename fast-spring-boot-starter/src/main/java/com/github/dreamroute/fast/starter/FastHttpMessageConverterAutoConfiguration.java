@@ -1,8 +1,12 @@
 package com.github.dreamroute.fast.starter;
 
+import com.alibaba.fastjson.serializer.ValueFilter;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.github.dreamroute.fast.api.EnumParserConfig;
+import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -39,19 +43,11 @@ import static org.springframework.http.MediaType.TEXT_XML;
  *
  * @author w.dehai
  */
+@Primary
 @ConditionalOnClass(ConfigurableWebApplicationContext.class)
 public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigurer {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.removeIf(conv -> conv instanceof MappingJackson2HttpMessageConverter);
-        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setSerializerFeatures(
-                WriteNullListAsEmpty,                                           // List字段如果为null, 输出为[], 而非null
-                WriteNullStringAsEmpty,                                       // 字符类型字段如果为null, 输出为"", 而非null
-                WriteNullBooleanAsFalse,                                      // Boolean字段如果为null, 输出为false, 而非null
-                DisableCircularReferenceDetect                           // 消除对同一对象循环引用的问题, 默认为false
-        );
 
         List<MediaType> mediaTypes = newArrayList(
                 APPLICATION_JSON,
@@ -72,11 +68,41 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
                 TEXT_XML
         );
 
-        fastConverter.setSupportedMediaTypes(mediaTypes);
-        fastConverter.setFastJsonConfig(fastJsonConfig);
-        fastConverter.setDefaultCharset(UTF_8);
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        converter.setSupportedMediaTypes(mediaTypes);
+        converter.setDefaultCharset(UTF_8);
 
-        // 将fast设置在头部，设置在尾会报错
-        converters.add(0, fastConverter);
+        // enum -> desc
+        FastJsonConfig config = createConfig();
+        converter.setFastJsonConfig(config);
+
+        // value -> enum
+        config.setParserConfig(new EnumParserConfig());
+
+        // 移除默认
+        converters.removeIf(conv -> conv instanceof MappingJackson2HttpMessageConverter);
+        // 将fast默认位置
+        converters.add(0, converter);
+    }
+
+    private FastJsonConfig createConfig() {
+        FastJsonConfig config = new FastJsonConfig();
+        config.setSerializerFeatures(
+                WriteNullListAsEmpty,                                           // List字段如果为null, 输出为[], 而非null
+                WriteNullStringAsEmpty,                                       // 字符类型字段如果为null, 输出为"", 而非null
+                WriteNullBooleanAsFalse,                                      // Boolean字段如果为null, 输出为false, 而非null
+                DisableCircularReferenceDetect                           // 消除对同一对象循环引用的问题, 默认为false
+        );
+
+        // enum -> json
+        ValueFilter vf = (object, name, value) -> {
+            if (value instanceof EnumMarker) {
+                return ((EnumMarker) value).getDesc();
+            }
+            return value;
+        };
+        config.setSerializeFilters(vf);
+        return config;
     }
 }
+
