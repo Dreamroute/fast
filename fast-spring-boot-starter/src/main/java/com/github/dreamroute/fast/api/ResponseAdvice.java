@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
@@ -62,6 +63,21 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             @Override
             public String getDesc() {
                 return "o(╥﹏╥)o~~系统出异常啦!,请联系管理员!";
+            }
+        };
+        return exception(respEnumMarker);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Object validateException(MethodArgumentNotValidException methodArgumentNotValidException) {
+        RespEnumMarker respEnumMarker = new RespEnumMarker() {
+            @Override
+            public Integer getCode() {
+                return 698;
+            }
+            @Override
+            public String getDesc() {
+                return methodArgumentNotValidException.getMessage();
             }
         };
         return exception(respEnumMarker);
