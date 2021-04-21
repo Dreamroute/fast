@@ -9,7 +9,7 @@ import lombok.Data;
  * @author w.dehai
  */
 @Data
-class RespUtil {
+public class RespUtil {
 
     @JSONField(ordinal = 1)
     private Integer code;
