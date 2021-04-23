@@ -97,7 +97,7 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
         // enum -> json
         ValueFilter vf = (object, name, value) -> {
             if (value instanceof EnumMarker) {
-                return ((EnumMarker) value).getDesc();
+                return ((EnumMarker) value).getValue();
             }
             return value;
         };
