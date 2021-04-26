@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.biz.exception.BizException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * 1、处理返回值；
@@ -78,6 +79,21 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             @Override
             public String getDesc() {
                 return methodArgumentNotValidException.getMessage();
+            }
+        };
+        return exception(respEnumMarker);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Object argumentException(IllegalArgumentException e) {
+        RespEnumMarker respEnumMarker = new RespEnumMarker() {
+            @Override
+            public Integer getCode() {
+                return 697;
+            }
+            @Override
+            public String getDesc() {
+                return e.getMessage();
             }
         };
         return exception(respEnumMarker);
