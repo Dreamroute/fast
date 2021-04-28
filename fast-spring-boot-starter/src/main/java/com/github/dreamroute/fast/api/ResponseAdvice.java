@@ -63,7 +63,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
             @Override
             public String getDesc() {
-                return "o(╥﹏╥)o~~系统出异常啦!,请联系管理员!";
+                return "系统发生异常，请稍后再试。";
             }
         };
         return exception(respEnumMarker);
