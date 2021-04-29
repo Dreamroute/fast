@@ -72,7 +72,7 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
         converter.setSupportedMediaTypes(mediaTypes);
         converter.setDefaultCharset(UTF_8);
 
-        // enum -> desc
+        // enum -> value
         FastJsonConfig config = createConfig();
         converter.setFastJsonConfig(config);
 

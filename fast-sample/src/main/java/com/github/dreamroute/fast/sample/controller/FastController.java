@@ -1,9 +1,12 @@
 package com.github.dreamroute.fast.sample.controller;
 
-import javax.biz.exception.BizException;
+import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.biz.exception.BizException;
 import java.io.IOException;
 
 import static com.github.dreamroute.fast.sample.config.RespEnum.BIZ;
@@ -32,5 +35,15 @@ public class FastController {
     @GetMapping("thro")
     public void thro() throws Throwable {
         throw new Throwable();
+    }
+
+    @PostMapping("/castEx")
+    public String castEx(@RequestBody Req req) {
+        return "yzw";
+    }
+
+    @Data
+    public static class Req {
+        private Long id;
     }
 }
