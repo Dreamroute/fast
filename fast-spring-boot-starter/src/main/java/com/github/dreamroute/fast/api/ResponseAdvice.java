@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.biz.exception.BizException;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * 1、处理返回值；
@@ -70,7 +70,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object validateException(MethodArgumentNotValidException methodArgumentNotValidException) {
+    public Object validateException(MethodArgumentNotValidException e) {
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -78,7 +78,8 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             }
             @Override
             public String getDesc() {
-                return methodArgumentNotValidException.getMessage();
+                FieldError fieldError = e.getBindingResult().getFieldError();
+                return fieldError != null ? fieldError.getDefaultMessage() : e.getMessage();
             }
         };
         return exception(respEnumMarker);
