@@ -1,6 +1,7 @@
 package com.github.dreamroute.fast.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.rpc.RpcException;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -104,6 +105,21 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object httpMessageNotReadableException(HttpMessageNotReadableException e) {
         return "类型转换错误, 详细错误: " + e.getLocalizedMessage();
+    }
+
+    @ExceptionHandler(RpcException.class)
+    public Object rpcException(RpcException e) {
+        RespEnumMarker respEnumMarker = new RespEnumMarker() {
+            @Override
+            public Integer getCode() {
+                return 695;
+            }
+            @Override
+            public String getDesc() {
+                return "服务发生异常，请稍后再试。";
+            }
+        };
+        return exception(respEnumMarker);
     }
 
     private Object exception(RespEnumMarker rem) {
