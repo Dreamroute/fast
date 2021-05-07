@@ -13,6 +13,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect;
@@ -65,7 +66,9 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
                 TEXT_HTML,
                 TEXT_MARKDOWN,
                 TEXT_PLAIN,
-                TEXT_XML
+                TEXT_XML,
+                // .net端回调使用的是application/json-rpc，所以这里加上此content-type
+                new MediaType("application", "json-rpc", StandardCharsets.UTF_8)
         );
 
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
