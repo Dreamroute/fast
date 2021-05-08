@@ -73,6 +73,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object validateException(MethodArgumentNotValidException e) {
+        log.error("[参数校验异常]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -89,6 +90,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public Object argumentException(IllegalArgumentException e) {
+        log.error("[参数校验异常]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -104,11 +106,13 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return "类型转换错误, 详细错误: " + e.getLocalizedMessage();
+        log.error("[类型转换错误, 详细错误]: ", e);
+        return exception(e);
     }
 
     @ExceptionHandler(RpcException.class)
     public Object rpcException(RpcException e) {
+        log.error("[RPC调用异常异常]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
