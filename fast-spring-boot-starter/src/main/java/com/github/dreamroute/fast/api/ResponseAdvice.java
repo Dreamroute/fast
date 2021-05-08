@@ -127,14 +127,14 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         return exception(respEnumMarker);
     }
 
-    @ExceptionHandler(UncheckedExecutionException.class)
-    public Object unchecked(UncheckedExecutionException e) {
-        log.error("[Guava异常]: ", e);
-        if (e.getCause() instanceof BizException) {
-            return bizException((BizException) e.getCause());
-        }
-        throw e;
-    }
+//    @ExceptionHandler(UncheckedExecutionException.class)
+//    public Object unchecked(UncheckedExecutionException e) {
+//        log.error("[Guava异常]: ", e);
+//        if (e.getCause() instanceof BizException) {
+//            return bizException((BizException) e.getCause());
+//        }
+//        throw e;
+//    }
 
     private Object exception(RespEnumMarker rem) {
         return RespUtil.exception(rem);
