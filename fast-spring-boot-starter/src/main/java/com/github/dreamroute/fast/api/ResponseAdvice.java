@@ -1,5 +1,6 @@
 package com.github.dreamroute.fast.api;
 
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.RpcException;
 import org.springframework.core.MethodParameter;
@@ -112,7 +113,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(RpcException.class)
     public Object rpcException(RpcException e) {
-        log.error("[RPC调用异常异常]: ", e);
+        log.error("[RPC调用异常]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -124,6 +125,15 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             }
         };
         return exception(respEnumMarker);
+    }
+
+    @ExceptionHandler(UncheckedExecutionException.class)
+    public Object unchecked(UncheckedExecutionException e) {
+        log.error("[Guava异常]: ", e);
+        if (e.getCause() instanceof BizException) {
+            return bizException((BizException) e.getCause());
+        }
+        throw e;
     }
 
     private Object exception(RespEnumMarker rem) {
