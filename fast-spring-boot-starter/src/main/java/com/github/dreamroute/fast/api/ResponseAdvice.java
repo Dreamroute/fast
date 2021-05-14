@@ -1,5 +1,7 @@
 package com.github.dreamroute.fast.api;
 
+import com.alibaba.fastjson.JSONException;
+import com.github.dreamroute.mybatis.pro.core.exception.MyBatisProException;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.RpcException;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.biz.exception.BizException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * 1、处理返回值；
@@ -108,7 +111,17 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object httpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.error("[类型转换错误, 详细错误]: ", e);
-        return exception(e);
+        RespEnumMarker respEnumMarker = new RespEnumMarker() {
+            @Override
+            public Integer getCode() {
+                return 680;
+            }
+            @Override
+            public String getDesc() {
+                return e.getMessage();
+            }
+        };
+        return exception(respEnumMarker);
     }
 
     @ExceptionHandler(RpcException.class)
