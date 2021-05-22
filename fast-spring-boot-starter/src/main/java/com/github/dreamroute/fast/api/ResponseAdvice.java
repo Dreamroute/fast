@@ -1,8 +1,5 @@
 package com.github.dreamroute.fast.api;
 
-import com.alibaba.fastjson.JSONException;
-import com.github.dreamroute.mybatis.pro.core.exception.MyBatisProException;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.RpcException;
 import org.springframework.core.MethodParameter;
@@ -11,15 +8,14 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.biz.exception.BizException;
+import javax.validation.ValidationException;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * 1、处理返回值；
@@ -75,6 +71,25 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         return exception(respEnumMarker);
     }
 
+    /**
+     * 参数是List类型的json会报这种错
+     */
+    @ExceptionHandler(ValidationException.class)
+    public Object constraintViolationException(ValidationException e) {
+        log.error("[参数校验异常]: ", e);
+        RespEnumMarker respEnumMarker = new RespEnumMarker() {
+            @Override
+            public Integer getCode() {
+                return 698;
+            }
+            @Override
+            public String getDesc() {
+                return e.getMessage();
+            }
+        };
+        return exception(respEnumMarker);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object validateException(MethodArgumentNotValidException e) {
         log.error("[参数校验异常]: ", e);
@@ -85,8 +100,8 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             }
             @Override
             public String getDesc() {
-                FieldError fieldError = e.getBindingResult().getFieldError();
-                return fieldError != null ? fieldError.getDefaultMessage() : e.getMessage();
+                MethodArgumentNotValidException ee = (MethodArgumentNotValidException) e;
+                return ee.getBindingResult().toString();
             }
         };
         return exception(respEnumMarker);
