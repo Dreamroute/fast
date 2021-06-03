@@ -66,7 +66,7 @@ public class FastController {
     public static class Mmm {
         @NotNull
         private Long id;
-        @NotEmpty
+        @NotEmpty(message = "用户名不能为空")
         private String name;
     }
 }

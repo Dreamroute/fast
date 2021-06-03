@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.biz.exception.BizException;
 import javax.validation.ValidationException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
 /**
  * 1、处理返回值；
@@ -101,7 +107,8 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             @Override
             public String getDesc() {
                 MethodArgumentNotValidException ee = (MethodArgumentNotValidException) e;
-                return ee.getBindingResult().toString();
+                List<ObjectError> allErrors = ee.getBindingResult().getAllErrors();
+                return ofNullable(allErrors).orElseGet(ArrayList::new).stream().map(ObjectError::getDefaultMessage).collect(joining(", "));
             }
         };
         return exception(respEnumMarker);
