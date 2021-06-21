@@ -83,7 +83,7 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
         config.setParserConfig(new EnumParserConfig());
 
         // 移除默认
-        converters.removeIf(conv -> conv instanceof MappingJackson2HttpMessageConverter);
+        converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         // 将fast默认位置
         converters.add(0, converter);
     }
