@@ -3,6 +3,9 @@ package javax.biz.exception;
 import lombok.Getter;
 
 /**
+ * dubbo对于COMMON_EXCEPTION的desc反序列化取不到desc的值，所以这里定义一个内部异常来包装此类型的异常，
+ * 在过滤器中判断是否是COMMON_EXCEPTION，如果是，那么就将异常设置成InnerException
+ *
  * @author : w.dehai.2021.03.30
  */
 @Getter
