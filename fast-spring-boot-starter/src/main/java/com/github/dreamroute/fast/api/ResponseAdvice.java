@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.biz.exception.BizException;
+import javax.biz.exception.InnerException;
 import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -55,6 +56,19 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     public Object bizException(BizException e) {
         log.error("[业务异常], " + e.toString(), e);
         return exception(e.getRespEnum());
+    }
+
+    @ExceptionHandler(InnerException.class)
+    public Object innerException(InnerException e) {
+        log.error("[业务异常], " + e.toString(), e);
+        return bizException(new BizException(new RespEnumMarker() {
+            public Integer getCode() {
+                return 700;
+            }
+            public String getDesc() {
+                return e.getDesc();
+            }
+        }, e));
     }
 
     /**
