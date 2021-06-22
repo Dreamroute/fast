@@ -12,19 +12,20 @@ import lombok.Getter;
 @Getter
 public class BizException extends RuntimeException {
 
-    private final RespEnumMarker respEnum;
+    private RespEnumMarker respEnum;
+
+    public BizException() {}
 
     public BizException(RespEnumMarker re) {
-        this.respEnum = re;
+        this(re, null);
     }
 
+    /**
+     * 需要调用super(message)，不然打印堆栈信息时候有message显示null，不明显
+     */
     public BizException(RespEnumMarker re, Throwable e) {
-        super(e);
+        super("错误码: " + re.getCode() + ", 错误信息: " + re.getDesc(), e);
         this.respEnum = re;
     }
 
-    @Override
-    public String toString() {
-        return "错误码: " + respEnum.getCode() + ", 错误信息: " + respEnum.getDesc();
-    }
 }

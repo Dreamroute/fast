@@ -54,13 +54,13 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
      */
     @ExceptionHandler(BizException.class)
     public Object bizException(BizException e) {
-        log.error("[业务异常], " + e.toString(), e);
+        log.error("[业务异常]", e);
         return exception(e.getRespEnum());
     }
 
     @ExceptionHandler(InnerException.class)
     public Object innerException(InnerException e) {
-        log.error("[业务异常], " + e.toString(), e);
+        log.error("[业务异常]", e);
         return bizException(new BizException(new RespEnumMarker() {
             public Integer getCode() {
                 return 700;
