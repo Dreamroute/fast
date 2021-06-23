@@ -1,10 +1,9 @@
 package com.github.dreamroute.fast.starter;
 
-import com.alibaba.fastjson.serializer.ValueFilter;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.dreamroute.fast.api.EnumParserConfig;
-import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
+import com.github.dreamroute.fast.api.EnumSerializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
@@ -98,13 +97,7 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
         );
 
         // enum -> json
-        ValueFilter vf = (object, name, value) -> {
-            if (value instanceof EnumMarker) {
-                return ((EnumMarker) value).getValue();
-            }
-            return value;
-        };
-        config.setSerializeFilters(vf);
+        config.setSerializeFilters(new EnumSerializer());
         return config;
     }
 }
