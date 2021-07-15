@@ -54,17 +54,19 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
      */
     @ExceptionHandler(BizException.class)
     public Object bizException(BizException e) {
-        log.error("[业务异常]", e);
+        log.warn("[业务异常]", e);
         return exception(e.getRespEnum());
     }
 
     @ExceptionHandler(InnerException.class)
     public Object innerException(InnerException e) {
-        log.error("[业务异常]", e);
+        log.warn("[业务异常]", e);
         return bizException(new BizException(new RespEnumMarker() {
+            @Override
             public Integer getCode() {
                 return 700;
             }
+            @Override
             public String getDesc() {
                 return e.getDesc();
             }
@@ -96,7 +98,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
      */
     @ExceptionHandler(ValidationException.class)
     public Object constraintViolationException(ValidationException e) {
-        log.error("[参数校验异常]: ", e);
+        log.warn("[参数校验异常]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -112,7 +114,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object validateException(MethodArgumentNotValidException e) {
-        log.error("[参数校验异常]: ", e);
+        log.warn("[参数校验异常]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -120,25 +122,8 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             }
             @Override
             public String getDesc() {
-                MethodArgumentNotValidException ee = (MethodArgumentNotValidException) e;
-                List<ObjectError> allErrors = ee.getBindingResult().getAllErrors();
+                List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
                 return ofNullable(allErrors).orElseGet(ArrayList::new).stream().map(ObjectError::getDefaultMessage).collect(joining(", "));
-            }
-        };
-        return exception(respEnumMarker);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Object argumentException(IllegalArgumentException e) {
-        log.error("[参数校验异常]: ", e);
-        RespEnumMarker respEnumMarker = new RespEnumMarker() {
-            @Override
-            public Integer getCode() {
-                return 697;
-            }
-            @Override
-            public String getDesc() {
-                return e.getMessage();
             }
         };
         return exception(respEnumMarker);
@@ -146,7 +131,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        log.error("[类型转换错误, 详细错误]: ", e);
+        log.warn("[类型转换错误, 详细错误]: ", e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -175,15 +160,6 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         };
         return exception(respEnumMarker);
     }
-
-//    @ExceptionHandler(UncheckedExecutionException.class)
-//    public Object unchecked(UncheckedExecutionException e) {
-//        log.error("[Guava异常]: ", e);
-//        if (e.getCause() instanceof BizException) {
-//            return bizException((BizException) e.getCause());
-//        }
-//        throw e;
-//    }
 
     private Object exception(RespEnumMarker rem) {
         return RespUtil.exception(rem);
