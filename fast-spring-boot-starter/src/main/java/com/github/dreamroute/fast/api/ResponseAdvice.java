@@ -78,7 +78,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
      */
     @ExceptionHandler(Exception.class)
     public Object exception(Exception e) {
-        log.error("[未知异常]: ", e);
+        log.error("[未知异常]：{}:{}", e.getClass(), e.getMessage(), e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
@@ -147,7 +147,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(RpcException.class)
     public Object rpcException(RpcException e) {
-        log.error("[RPC调用异常]: ", e);
+        log.error("[RPC调用异常]：{}:{}", e.getClass(), e.getMessage(), e);
         RespEnumMarker respEnumMarker = new RespEnumMarker() {
             @Override
             public Integer getCode() {
