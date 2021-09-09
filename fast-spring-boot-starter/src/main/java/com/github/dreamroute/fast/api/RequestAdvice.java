@@ -10,8 +10,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import static com.alibaba.fastjson.JSON.toJSONString;
-
 /**
  * @author w.dehai.2021/7/21.16:16
  */
@@ -33,7 +31,7 @@ public class RequestAdvice extends RequestBodyAdviceAdapter {
         Optional.of(parameter).map(MethodParameter::getMethod).ifPresent(m -> {
             String controllerName = m.getDeclaringClass().getSimpleName();
             String methodName = m.getName();
-            log.info("\r\n请求接口: {}\r\n参数: {}", controllerName + "." + methodName, toJSONString(body, true));
+            log.info("\r\n请求接口: {}\r\n参数: {}", controllerName + "." + methodName, JsonUtil.toJsonStr(body));
         });
         return body;
     }
