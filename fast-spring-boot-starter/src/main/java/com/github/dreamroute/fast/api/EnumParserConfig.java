@@ -2,7 +2,7 @@ package com.github.dreamroute.fast.api;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
-import com.github.dreamroute.mybatis.pro.base.EnumMarker;
+import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
 
 import java.lang.reflect.Type;
 

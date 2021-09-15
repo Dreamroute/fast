@@ -1,7 +1,7 @@
 package com.github.dreamroute.fast.api;
 
 import com.alibaba.fastjson.serializer.ValueFilter;
-import com.github.dreamroute.mybatis.pro.base.EnumMarker;
+import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
 
 /**
  * 枚举序列化时候，将枚举类型转换成value类型

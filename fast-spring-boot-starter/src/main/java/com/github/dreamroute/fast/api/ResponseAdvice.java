@@ -2,7 +2,6 @@ package com.github.dreamroute.fast.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.RpcException;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -32,8 +31,7 @@ import static java.util.stream.Collectors.joining;
  * @author w.dehai
  */
 @Slf4j
-@RestControllerAdvice("${fast.path:cn.yzw.jc}")
-@EnableConfigurationProperties(FastProperties.class)
+@RestControllerAdvice("cn.yzw.jc")
 @SuppressWarnings("ALL")
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
