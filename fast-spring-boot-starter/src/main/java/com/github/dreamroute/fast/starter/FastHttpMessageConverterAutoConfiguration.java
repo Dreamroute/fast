@@ -90,10 +90,14 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
     private FastJsonConfig createConfig() {
         FastJsonConfig config = new FastJsonConfig();
         config.setSerializerFeatures(
-                WriteNullListAsEmpty,                                           // List字段如果为null, 输出为[], 而非null
-                WriteNullStringAsEmpty,                                       // 字符类型字段如果为null, 输出为"", 而非null
-                WriteNullBooleanAsFalse,                                      // Boolean字段如果为null, 输出为false, 而非null
-                DisableCircularReferenceDetect                           // 消除对同一对象循环引用的问题, 默认为false
+                // List字段如果为null, 输出为[], 而非null
+                WriteNullListAsEmpty,
+                // 字符类型字段如果为null, 输出为"", 而非null
+                WriteNullStringAsEmpty,
+                // Boolean字段如果为null, 输出为false, 而非null
+                WriteNullBooleanAsFalse,
+                // 消除对同一对象循环引用的问题, 默认为false
+                DisableCircularReferenceDetect
         );
 
         // enum -> json
