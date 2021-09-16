@@ -4,7 +4,7 @@ import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONLexer;
 import com.alibaba.fastjson.parser.JSONToken;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
-import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
+import com.github.dreamroute.mybatis.pro.base.EnumMarker;
 
 import java.lang.reflect.Type;
 

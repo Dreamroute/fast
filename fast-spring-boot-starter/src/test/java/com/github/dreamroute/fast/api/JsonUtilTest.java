@@ -1,6 +1,6 @@
 package com.github.dreamroute.fast.api;
 
-import com.github.dreamroute.mybatis.pro.core.typehandler.EnumMarker;
+import com.github.dreamroute.mybatis.pro.base.EnumMarker;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
