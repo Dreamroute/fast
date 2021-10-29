@@ -1,19 +1,36 @@
 package com.github.dreamroute.fast.starter;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.github.dreamroute.fast.api.DateSerializer;
 import com.github.dreamroute.fast.api.EnumParserConfig;
 import com.github.dreamroute.fast.api.EnumSerializer;
+import com.github.dreamroute.mybatis.pro.base.EnumMarker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect;
 import static com.alibaba.fastjson.serializer.SerializerFeature.WriteNullBooleanAsFalse;
@@ -46,6 +63,9 @@ import static org.springframework.http.MediaType.TEXT_XML;
 @Primary
 @ConditionalOnClass(ConfigurableWebApplicationContext.class)
 public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigurer {
+
+    private static final String SUFFIX = "Str";
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
@@ -70,16 +90,37 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
                 new MediaType("application", "json-rpc", StandardCharsets.UTF_8)
         );
 
-        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter() {
+            @Override
+            public void write(Object o, Type type, MediaType contentType, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+                Field[] fields = ReflectUtil.getFields(o.getClass());
+                Map<String, Object> data = new HashMap<>();
+                if (fields != null && fields.length > 0) {
+                    for (Field field : fields) {
+                        Object v = ReflectUtil.getFieldValue(o, field);
+                        String fieldName = field.getName();
+                        data.put(fieldName, v);
+
+                        if (v instanceof EnumMarker) {
+                            data.put(fieldName, ((EnumMarker) v).getValue());
+                            data.put(fieldName + SUFFIX, ((EnumMarker) v).getDesc());
+                        }
+
+                        if (v instanceof Date) {
+                            data.put(fieldName + SUFFIX, DateUtil.format((Date) v, "yyyy-MM-dd HH:mm:ss.SSS"));
+                        }
+                    }
+                }
+                super.write(data, type, contentType, outputMessage);
+            }
+        };
         converter.setSupportedMediaTypes(mediaTypes);
         converter.setDefaultCharset(UTF_8);
 
-        // enum -> value
-        FastJsonConfig config = createConfig();
+        FastJsonConfig config = new FastJsonConfig();
+        initSeria(config);
+        initDeSeria(config);
         converter.setFastJsonConfig(config);
-
-        // value -> enum
-        config.setParserConfig(new EnumParserConfig());
 
         // 移除默认
         converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
@@ -87,8 +128,10 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
         converters.add(0, converter);
     }
 
-    private FastJsonConfig createConfig() {
-        FastJsonConfig config = new FastJsonConfig();
+    /**
+     * 序列化配置
+     */
+    private void initSeria(FastJsonConfig config) {
         config.setSerializerFeatures(
                 // List字段如果为null, 输出为[], 而非null
                 WriteNullListAsEmpty,
@@ -100,9 +143,17 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
                 DisableCircularReferenceDetect
         );
 
-        // enum -> json
-        config.setSerializeFilters(new EnumSerializer());
-        return config;
+        // enum -> json, Date -> yyyy-MM-dd HH:mm:ss.SSS
+//        config.setSerializeFilters(new EnumSerializer(), new DateSerializer());
     }
+
+    /**
+     * 反序列化配置
+     */
+    private void initDeSeria(FastJsonConfig config) {
+        // json -> enum
+        config.setParserConfig(new EnumParserConfig());
+    }
+
 }
 

@@ -16,9 +16,9 @@ import java.lang.reflect.Type;
  */
 public class EnumDeserializer implements ObjectDeserializer {
     @Override
-    public  <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {
+    public <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {
         final JSONLexer lexer = parser.lexer;
-        Class cls = (Class) type;
+        Class<EnumMarker> cls = (Class<EnumMarker>) type;
         if (EnumMarker.class.isAssignableFrom(cls)) {
             return (T) EnumMarker.valueOf(cls, lexer.intValue());
         }

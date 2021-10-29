@@ -1,5 +1,6 @@
 package com.github.dreamroute.fast.sample.controller;
 
+import com.github.dreamroute.fast.sample.domain.UserReq;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +61,12 @@ public class FastController {
     @PostMapping("/m4")
     public void m4(@Valid @RequestBody List<Mmm> mmm) {
 
+    }
+
+    @PostMapping("/enumTest")
+    public UserReq enumTest(@Validated @RequestBody UserReq userReq) {
+        System.err.println(userReq);
+        return userReq;
     }
 
     @Data
