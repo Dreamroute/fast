@@ -1,8 +1,11 @@
 package com.github.dreamroute.fast.starter;
 
+import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.github.dreamroute.fast.api.DateSerializer;
 import com.github.dreamroute.fast.api.EnumParserConfig;
+import com.github.dreamroute.fast.api.EnumSerializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
@@ -70,7 +73,7 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
                 new MediaType("application", "json-rpc", StandardCharsets.UTF_8)
         );
 
-        FastJsonHttpMessageConverter converter = new CustomHttpMessageConverter();
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         converter.setSupportedMediaTypes(mediaTypes);
         converter.setDefaultCharset(UTF_8);
 
@@ -100,8 +103,13 @@ public class FastHttpMessageConverterAutoConfiguration implements WebMvcConfigur
                 DisableCircularReferenceDetect
         );
 
-        // enum -> json, Date -> yyyy-MM-dd HH:mm:ss.SSS
-//        config.setSerializeFilters(new EnumSerializer(), new DateSerializer());
+        SerializeFilter[] serializeFilters = {
+                // Date -> yyyy-MM-dd HH:mm:ss.SSS
+//                new DateSerializer(),
+                // enum -> json
+                new EnumSerializer()
+        };
+        config.setSerializeFilters(serializeFilters);
     }
 
     /**
