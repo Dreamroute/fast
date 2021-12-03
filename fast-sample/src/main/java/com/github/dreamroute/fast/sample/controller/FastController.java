@@ -4,6 +4,7 @@ import com.github.dreamroute.fast.sample.domain.UserReq;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,6 +68,11 @@ public class FastController {
     public UserReq enumTest(@Validated @RequestBody UserReq userReq) {
         System.err.println(userReq);
         return userReq;
+    }
+
+    @GetMapping("/naNTest/{id}")
+    public void naNTest(@PathVariable("id") Long id) {
+        System.err.println(id);
     }
 
     @Data

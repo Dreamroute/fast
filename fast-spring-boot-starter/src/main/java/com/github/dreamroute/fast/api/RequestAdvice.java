@@ -11,10 +11,13 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 /**
+ * 打印controller参数，已经可以使用ArgsPrinter替换了，无需在此配置了
+ *
  * @author w.dehai.2021/7/21.16:16
  */
 @Slf4j
 @RestControllerAdvice
+@Deprecated
 public class RequestAdvice extends RequestBodyAdviceAdapter {
 
     public RequestAdvice() {

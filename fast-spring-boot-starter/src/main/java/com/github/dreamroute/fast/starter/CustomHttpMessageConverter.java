@@ -2,6 +2,8 @@ package com.github.dreamroute.fast.starter;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ReflectUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.deserializer.ParseProcess;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.dreamroute.mybatis.pro.base.EnumMarker;
 import org.springframework.http.HttpOutputMessage;
@@ -26,6 +28,7 @@ public class CustomHttpMessageConverter extends FastJsonHttpMessageConverter {
 
     @Override
     public void write(Object o, Type type, MediaType contentType, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+
         Field[] fields = ReflectUtil.getFields(o.getClass());
         Map<String, Object> data = new HashMap<>();
         if (fields != null && fields.length > 0) {
