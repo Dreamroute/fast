@@ -1,4 +1,4 @@
-package com.github.dreamroute.fast.api;
+package com.github.dreamroute.fast.api.deserializer;
 
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONLexer;
@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
  *
  * @author w.dehai
  */
+@SuppressWarnings("unchecked")
 public class EnumDeserializer implements ObjectDeserializer {
     @Override
     public <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {

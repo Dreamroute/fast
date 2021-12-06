@@ -1,4 +1,4 @@
-package com.github.dreamroute.fast.api;
+package com.github.dreamroute.fast.api.serializer;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.serializer.ValueFilter;

@@ -9,8 +9,14 @@ import java.io.Serializable;
  */
 public interface RespEnumMarker extends Serializable {
 
+    /**
+     * 返回值的code
+     */
     Integer getCode();
 
+    /**
+     * 返回值的描述
+     */
     String getDesc();
 
 }

@@ -1,7 +1,8 @@
-package com.github.dreamroute.fast.api;
+package com.github.dreamroute.fast.api.serializer;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
+import com.github.dreamroute.fast.api.deserializer.EnumDeserializer;
 import com.github.dreamroute.mybatis.pro.base.EnumMarker;
 
 import java.lang.reflect.Type;

@@ -1,4 +1,4 @@
-package com.github.dreamroute.fast.api;
+package com.github.dreamroute.fast.api.serializer;
 
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.github.dreamroute.mybatis.pro.base.EnumMarker;

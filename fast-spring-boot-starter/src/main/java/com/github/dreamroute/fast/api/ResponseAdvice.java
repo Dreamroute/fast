@@ -31,8 +31,8 @@ import static java.util.stream.Collectors.joining;
  * @author w.dehai
  */
 @Slf4j
-@RestControllerAdvice("cn.yzw.jc")
 @SuppressWarnings("ALL")
+@RestControllerAdvice("cn.yzw.jc")
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     /**
