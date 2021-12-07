@@ -1,8 +1,6 @@
 package com.github.dreamroute.fast.api;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.github.dreamroute.fast.api.serializer.EnumParserConfig;
-import com.github.dreamroute.fast.api.serializer.EnumSerializer;
 
 import java.util.List;
 

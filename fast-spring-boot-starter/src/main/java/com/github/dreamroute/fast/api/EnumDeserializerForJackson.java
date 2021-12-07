@@ -1,4 +1,4 @@
-package com.github.dreamroute.fast.api.deserializer;
+package com.github.dreamroute.fast.api;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -2,7 +2,6 @@ package com.github.dreamroute.fast.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.github.dreamroute.fast.api.serializer.EnumSerializerForJackson;
 import com.github.dreamroute.mybatis.pro.base.EnumMarker;
 import lombok.AllArgsConstructor;
 import lombok.Data;

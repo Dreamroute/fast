@@ -1,4 +1,4 @@
-package com.github.dreamroute.fast.api.serializer;
+package com.github.dreamroute.fast.api;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

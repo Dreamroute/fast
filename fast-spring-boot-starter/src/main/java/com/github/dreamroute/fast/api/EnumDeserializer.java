@@ -1,4 +1,4 @@
-package com.github.dreamroute.fast.api.deserializer;
+package com.github.dreamroute.fast.api;
 
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONLexer;
