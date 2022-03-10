@@ -123,7 +123,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             @Override
             public String getDesc() {
                 List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
-                return ofNullable(allErrors).orElseGet(ArrayList::new).stream().map(ObjectError::getDefaultMessage).collect(joining(", "));
+                return ofNullable(allErrors).orElseGet(ArrayList::new).stream().map(ObjectError::getDefaultMessage).distinct().collect(joining(", "));
             }
         };
         return exception(respEnumMarker);
