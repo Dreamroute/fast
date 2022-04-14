@@ -2,6 +2,7 @@ package com.github.dreamroute.fast.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.RpcException;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -91,6 +92,21 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             }
         };
         return exception(respEnumMarker);
+    }
+
+    /**
+     * mybatis异常，mybatis插件抛出的异常会被封装成MyBatisSystemException，需要调用两次getCause()才能获取到我们自定义的异常
+     */
+    @ExceptionHandler(MyBatisSystemException.class)
+    public Object mybatisSystemException(Exception e) {
+        Throwable cause = e.getCause().getCause();
+        if (cause instanceof BizException) {
+            log.error("[mybatisSystemException]：{}:{}", cause.getClass(), cause.getMessage(), cause);
+            BizException bizException = (BizException) cause;
+            return bizException(bizException);
+        }
+
+        return exception(e);
     }
 
     /**
