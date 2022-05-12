@@ -61,7 +61,6 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(InnerException.class)
     public Object innerException(InnerException e) {
-        log.warn("[业务异常]", e);
         return bizException(new BizException(new RespEnumMarker() {
             @Override
             public Integer getCode() {

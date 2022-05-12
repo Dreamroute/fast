@@ -14,6 +14,8 @@ public class InnerException extends RuntimeException {
     private final String desc;
 
     public InnerException(String desc) {
+        // 这里调用super，在responseadvice中打印时候message信息才不为null
+        super(desc);
         this.desc = desc;
     }
 }
