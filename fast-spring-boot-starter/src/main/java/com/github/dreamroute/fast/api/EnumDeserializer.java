@@ -5,6 +5,7 @@ import com.alibaba.fastjson.parser.JSONLexer;
 import com.alibaba.fastjson.parser.JSONToken;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 import com.github.dreamroute.mybatis.pro.base.EnumMarker;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
 
@@ -21,6 +22,10 @@ public class EnumDeserializer implements ObjectDeserializer {
         final JSONLexer lexer = parser.lexer;
         Class<EnumMarker> cls = (Class<EnumMarker>) type;
         if (EnumMarker.class.isAssignableFrom(cls)) {
+            String v = lexer.stringVal();
+            if (StringUtils.isEmpty(v)) {
+                return null;
+            }
             return (T) EnumMarker.valueOf(cls, lexer.intValue());
         }
         return null;
