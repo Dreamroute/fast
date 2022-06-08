@@ -1,5 +1,6 @@
 package com.github.dreamroute.fast.sample.controller;
 
+import com.github.dreamroute.fast.sample.domain.Gender;
 import com.github.dreamroute.fast.sample.domain.UserReq;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import static com.github.dreamroute.fast.sample.config.RespEnum.BIZ;
@@ -68,6 +70,18 @@ public class FastController {
     public UserReq enumTest(@Validated @RequestBody UserReq userReq) {
         System.err.println(userReq);
         return userReq;
+    }
+
+    @PostMapping("/enumArrTest")
+    public void enumArrTest(@Validated @RequestBody EnumArrTest req) {
+        System.err.println(req);
+    }
+
+    @Data
+    static class EnumArrTest implements Serializable {
+        private List<Gender> genders;
+//        private Gender gender;
+//        private List<String> names;
     }
 
     @GetMapping("/naNTest/{id}")
